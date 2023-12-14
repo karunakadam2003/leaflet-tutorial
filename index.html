@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <title>Document</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+</body>
+
+
+</html>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    //Default view
+    var map = L.map('map').setView([21.7679, 78.8718], 5);
+
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    osm.addTo(map);
+
+    // L.marker([51.5, -0.09]).addTo(map)
+    //     .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+    //     .openPopup();
+
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    Esri_WorldImagery.addTo(map);
+
+    googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    googleStreets.addTo(map);
+    var myIcon = L.icon({
+    iconUrl: 'img/marker_2.png',
+    iconSize: [30, 35],
+    
+});
+    var singleMarker =  L.marker([21.7679, 78.8718],{ icon : myIcon, draggable:true});
+    var popup = singleMarker.bindPopup("This is India "+ singleMarker.getLatLng()).openPopup();
+    popup.addTo(map);
+
+
+
+    var baseMaps ={
+
+        "OSM" : osm,
+        "Esri_WorldImagery": Esri_WorldImagery,
+        "googleStreets":googleStreets
+    }
+
+    var overlayMaps ={
+      "singleMarker" : singleMarker
+    }
+     L.control.layers(baseMaps, overlayMaps).addTo(map);
+</script>
